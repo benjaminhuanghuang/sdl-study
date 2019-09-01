@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/usr/local/Cellar/sdl2/2.0.9_1/include/SDL2",
-                "/usr/local/Cellar/sdl_ttf/2.0.11_1/include/SDL"
+                "/usr/local/Cellar/sdl_ttf/2.0.11_1/include/SDL",
+                "/usr/local/Cellar/sdl_image/1.2.12_7/include/SDL"
             ],
             "defines": [],
             "macFrameworkPath": [],
