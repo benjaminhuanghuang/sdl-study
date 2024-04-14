@@ -1,6 +1,28 @@
 {
     "configurations": [
         {
+            "name": "Win32",
+            "includePath": [
+                "c:/ben-github/sdl-study/**",
+                "C:/SDL2/include"
+            ],
+            "defines": [],
+            "macFrameworkPath": [],
+            "compilerPath": "C:/msys64/ucrt64/bin/g++.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "windows-gcc-x64",
+            "mergeConfigurations": false,
+            "browse": {
+                "path": [
+                    "c:/ben-github/sdl-study/**",
+                    "C:/SDL2/include",
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        },
+        {
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
@@ -10,7 +32,6 @@
             ],
             "defines": [],
             "macFrameworkPath": [],
-            "compilerPath": "/usr/local/bin/gcc-7",
             "cStandard": "c11",
             "cppStandard": "c++17",
             "intelliSenseMode": "clang-x64"
