@@ -1,10 +1,10 @@
 C        = gcc
 FLAGS    = -std=c99 -Wall -g
-INCLUDES = -ISDL2/include
-LIBS   	 = -LSDL2/lib -lmingw32 -lSDL2main -lSDL2
+INCLUDES = -IC:\SDL2\include
+LIBS   	 = -LC:\SDL2\lib -lmingw32 -lSDL2main -lSDL2
 SRC      = sdl-demo.c
-OBJS	   = $(SRC:.c=.o)
-TARGET   = sdl-demo.exe
+OBJS	 = $(SRC:.c=.o)
+TARGET   = demo.exe
 
 
 $(TARGET): $(OBJS)

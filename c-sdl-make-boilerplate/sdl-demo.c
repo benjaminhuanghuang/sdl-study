@@ -4,8 +4,8 @@
 
 #define WINDOW_X 50
 #define WINDOW_Y 50
-#define WINDOW_WIDTH 1024
-#define WINDOW_HEIGHT 1024
+#define WINDOW_WIDTH 640
+#define WINDOW_HEIGHT 480
 
 int main(int argc, char *argv[])
 {
@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    SDL_Window *window = SDL_CreateWindow("SDL Game", WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_BORDERLESS);
+    SDL_Window *window = SDL_CreateWindow("SDL Game", WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     if (!window)
     {
         fprintf(stderr, "ERROR: !window");
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "ERROR: !renderer");
         return 1;
     }
-
+    SDL_RenderClear(renderer);
     bool quit = false;
     SDL_Event event;
     while (!quit)
@@ -46,8 +46,7 @@ int main(int argc, char *argv[])
         }
 
         // Drawing the background
-        SDL_SetRenderDrawColor(renderer, 0x11, 0x11, 0x11, 255);
-        SDL_RenderPresent(renderer);
+      
         SDL_Delay(300);
     }
     // Clean at the end
