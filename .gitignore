@@ -10,3 +10,5 @@ bin/
 lib/
 *.zip
 *.cmake
+*.exe
+*.dll

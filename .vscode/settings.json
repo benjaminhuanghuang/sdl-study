@@ -1,7 +1,9 @@
 {
-    "C_Cpp.default.compilerPath": "C:\\msys64\\ucrt64\\bin\\g++.exe",
-    "files.associations": {
-        "MLTable": "yaml",
-        "sdl.h": "c"
-    }
+  "C_Cpp.default.compilerPath": "C:\\msys64\\ucrt64\\bin\\g++.exe",
+  "files.associations": {
+    "MLTable": "yaml",
+    "sdl.h": "c"
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
