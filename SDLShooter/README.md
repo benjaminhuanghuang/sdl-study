@@ -16,3 +16,5 @@ brew install sdl2_image sdl2_mixer sdl2_ttf sdl2_net
 cmake -B build
 cmake --build build
 ```
+
+## Singleton pattern in Game class
