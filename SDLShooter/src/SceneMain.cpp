@@ -22,7 +22,7 @@ void SceneMain::init()
     player.position.y = game.getWindowHeight() - player.height;
 
     // Init template
-    projectilePlayerTemplate.texture = IMG_LoadTexture(game.getRenderer(), "assets/image/Projectile.png");
+    projectilePlayerTemplate.texture = IMG_LoadTexture(game.getRenderer(), "assets/image/laser-1.png");
     SDL_QueryTexture(projectilePlayerTemplate.texture, nullptr, nullptr, &projectilePlayerTemplate.width, &projectilePlayerTemplate.height);
     projectilePlayerTemplate.width /= 4;
     projectilePlayerTemplate.height /= 4;
