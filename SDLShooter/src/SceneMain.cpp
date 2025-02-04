@@ -38,3 +38,7 @@ void SceneMain::clean()
 void SceneMain::handleEvent(SDL_Event *event)
 {
 }
+
+void SceneMain::keyboardControls()
+{
+}

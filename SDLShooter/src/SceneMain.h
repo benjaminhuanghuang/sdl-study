@@ -17,6 +17,7 @@ public:
     void render() override;
     void clean() override;
     void handleEvent(SDL_Event *event) override;
+    void keyboardControls();
 
 private:
     Game &game;
