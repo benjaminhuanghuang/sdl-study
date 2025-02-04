@@ -13,52 +13,77 @@ SceneMain::~SceneMain()
 
 void SceneMain::init()
 {
+    // Load player
     player.texture = IMG_LoadTexture(game.getRenderer(), "assets/image/SpaceShip.png");
     SDL_QueryTexture(player.texture, nullptr, nullptr, &player.width, &player.height);
     player.width /= 4;
     player.height /= 4;
     player.position.x = game.getWindowWidth() / 2 - player.width / 2;
     player.position.y = game.getWindowHeight() - player.height;
+
+    // Init template
+    projectilePlayerTemplate.texture = IMG_LoadTexture(game.getRenderer(), "assets/image/Projectile.png");
+    SDL_QueryTexture(projectilePlayerTemplate.texture, nullptr, nullptr, &projectilePlayerTemplate.width, &projectilePlayerTemplate.height);
+    projectilePlayerTemplate.width /= 4;
+    projectilePlayerTemplate.height /= 4;
 }
 
-void SceneMain::update()
+void SceneMain::update(float deltaTime)
 {
-    keyboardControl();
+    keyboardControl(deltaTime);
+    updatePlayerProjectiles(deltaTime);
 }
 
 void SceneMain::render()
 {
+    // Render player
     SDL_Rect playerRect = {static_cast<int>(player.position.x), static_cast<int>(player.position.y), player.width, player.height};
     SDL_RenderCopy(game.getRenderer(), player.texture, nullptr, &playerRect);
+
+    renderPlayerProjectiles();
 }
 void SceneMain::clean()
 {
-    SDL_DestroyTexture(player.texture);
+    for (auto &projectile : projectilesPlayer)
+    {
+        if (projectile != nullptr)
+        {
+            delete projectile;
+        }
+    }
+    if (player.texture != nullptr)
+    {
+        SDL_DestroyTexture(player.texture);
+    }
+    if (projectilePlayerTemplate.texture != nullptr)
+    {
+        SDL_DestroyTexture(projectilePlayerTemplate.texture);
+    }
 }
 
 void SceneMain::handleEvent(SDL_Event *event)
 {
 }
 
-void SceneMain::keyboardControl()
+void SceneMain::keyboardControl(float deltaTime)
 {
     auto keyboardState = SDL_GetKeyboardState(nullptr);
 
     if (keyboardState[SDL_SCANCODE_W])
     {
-        player.position.y -= 5;
+        player.position.y -= deltaTime * player.speed;
     }
     if (keyboardState[SDL_SCANCODE_S])
     {
-        player.position.y += 5;
+        player.position.y += deltaTime * player.speed;
     }
     if (keyboardState[SDL_SCANCODE_A])
     {
-        player.position.x -= 5;
+        player.position.x -= deltaTime * player.speed;
     }
     if (keyboardState[SDL_SCANCODE_D])
     {
-        player.position.x += 5;
+        player.position.x += deltaTime * player.speed;
     }
 
     if (player.position.x < 0)
@@ -76,5 +101,55 @@ void SceneMain::keyboardControl()
     if (player.position.y > game.getWindowHeight() - player.height)
     {
         player.position.y = game.getWindowHeight() - player.height;
+    }
+
+    // Fire
+    if (keyboardState[SDL_SCANCODE_J])
+    {
+        auto currTime = SDL_GetTicks();
+        if (currTime - player.lastShotTime > player.coolDown)
+        {
+            shoot();
+            player.lastShotTime = currTime;
+        }
+    }
+}
+
+void SceneMain::shoot()
+{
+    auto *projectile = new ProjectilePlayer(projectilePlayerTemplate);
+    projectile->position.x = player.position.x + player.width / 2 - projectile->width / 2;
+    projectile->position.y = player.position.y - projectile->height;
+    projectilesPlayer.push_back(projectile);
+}
+
+void SceneMain::updatePlayerProjectiles(float deltaTime)
+{
+    for (auto it = projectilesPlayer.begin(); it != projectilesPlayer.end();)
+    {
+        auto projectile = *it;
+        projectile->position.y -= deltaTime * projectile->speed;
+        if (projectile->position.y < 0)
+        {
+            delete projectile;
+            it = projectilesPlayer.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+}
+
+void SceneMain::renderPlayerProjectiles()
+{
+    for (auto projectile : projectilesPlayer)
+    {
+        SDL_Rect projectileRect = {
+            static_cast<int>(projectile->position.x),
+            static_cast<int>(projectile->position.y),
+            projectile->width,
+            projectile->height};
+        SDL_RenderCopy(game.getRenderer(), projectile->texture, nullptr, &projectileRect);
     }
 }

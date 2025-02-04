@@ -59,5 +59,6 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[cpp]": {
     "editor.defaultFormatter": "ms-vscode.cpptools"
-  }
+  },
+  "cmake.sourceDirectory": "/Users/BenjaminHuang/ben-git/sdl-study/SDLShooter"
 }

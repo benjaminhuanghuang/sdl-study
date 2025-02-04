@@ -15,15 +15,29 @@ void Game::run()
 {
     while (isRunning)
     {
+        auto frameStart = SDL_GetTicks();
         SDL_Event event;
         handleEvent(&event);
-        update();
+        update(deltaTime);
         render();
+        auto frameEnd = SDL_GetTicks();
+        auto diff = frameEnd - frameStart;
+        if (diff < frameTime)
+        {
+            SDL_Delay(frameTime - diff);
+            deltaTime = frameTime / 1000.0f;
+        }
+        else
+        {
+            deltaTime = diff / 1000.0f;
+        }
     }
 }
 
 void Game::init()
 {
+    frameTime = 1000 / FPS;
+
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "SDL initialized failed: %s", SDL_GetError());
@@ -90,9 +104,9 @@ void Game::handleEvent(SDL_Event *event)
         currentScene->handleEvent(event);
     }
 }
-void Game::update()
+void Game::update(float deltaTime)
 {
-    currentScene->update();
+    currentScene->update(deltaTime);
 }
 void Game::render()
 {

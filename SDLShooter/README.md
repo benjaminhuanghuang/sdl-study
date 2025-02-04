@@ -18,3 +18,7 @@ cmake --build build
 ```
 
 ## Singleton pattern in Game class
+
+## FPS
+
+Game.run
