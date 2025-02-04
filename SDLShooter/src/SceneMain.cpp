@@ -125,14 +125,16 @@ void SceneMain::shoot()
 
 void SceneMain::updatePlayerProjectiles(float deltaTime)
 {
+    int margin = 32;
     for (auto it = projectilesPlayer.begin(); it != projectilesPlayer.end();)
     {
         auto projectile = *it;
         projectile->position.y -= deltaTime * projectile->speed;
-        if (projectile->position.y < 0)
+        if (projectile->position.y + margin < 0)
         {
             delete projectile;
             it = projectilesPlayer.erase(it);
+            SDL_Log("Player projectile deleted");
         }
         else
         {
