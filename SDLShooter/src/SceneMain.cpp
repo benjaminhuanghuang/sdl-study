@@ -309,6 +309,8 @@ void SceneMain::renderEnemyProjectiles()
             static_cast<int>(projectile->position.y),
             projectile->width,
             projectile->height};
-        SDL_RenderCopy(game.getRenderer(), projectile->texture, nullptr, &projectileRect);
+
+        float angle = atan2(projectile->direction.y, projectile->direction.x) * 180 / M_PI - 90;
+        SDL_RenderCopyEx(game.getRenderer(), projectile->texture, nullptr, &projectileRect, angle, nullptr, SDL_FLIP_NONE);
     }
 }
