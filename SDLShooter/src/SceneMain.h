@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Object.h"
 #include <list>
+#include <random>
 
 class Game;
 
@@ -22,13 +23,19 @@ public:
     void shoot();
     void updatePlayerProjectiles(float deltaTime);
     void renderPlayerProjectiles();
+    void spawnEnemy();
+    void updateEnemies(float deltaTime);
 
 private:
     Game &game;
     Player player;
+    std::mt19937 randomEngine;
+    std::uniform_real_distribution<float> dist;
     // Object template
     ProjectilePlayer projectilePlayerTemplate;
+    Enemy enemyTemplate;
 
     std::list<ProjectilePlayer *> projectilesPlayer;
+    std::list<Enemy *> enemies;
 };
 #endif // SCENE_MAIN_H
