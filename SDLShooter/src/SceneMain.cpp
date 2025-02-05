@@ -78,6 +78,7 @@ void SceneMain::init()
 
     // Icon
     uiHealth = IMG_LoadTexture(game.getRenderer(), "assets/image/health.png");
+    scoreFont = TTF_OpenFont("assets/font/VonwaonBitmap-12px.ttf", 24);
 }
 
 void SceneMain::update(float deltaTime)
@@ -210,6 +211,11 @@ void SceneMain::clean()
     if (uiHealth != nullptr)
     {
         SDL_DestroyTexture(uiHealth);
+    }
+
+    if (scoreFont != nullptr)
+    {
+        TTF_CloseFont(scoreFont);
     }
 }
 
@@ -400,7 +406,6 @@ void SceneMain::updateEnemies(float deltaTime)
         {
             delete enemy;
             it = enemies.erase(it);
-            SDL_Log("Enemy deleted");
         }
         else
         {
@@ -516,7 +521,7 @@ void SceneMain::enemyExplode(Enemy *enemy)
     {
         dropItem(enemy);
     }
-
+    score += 10;
     delete enemy;
 }
 
@@ -652,6 +657,7 @@ void SceneMain::renderItems()
 }
 void SceneMain::renderUI()
 {
+    // Draw health
     int x = 10;
     int y = 10;
     int size = 32;
@@ -668,4 +674,14 @@ void SceneMain::renderUI()
         SDL_Rect dest = {x + i * offset, y, size, size};
         SDL_RenderCopy(game.getRenderer(), uiHealth, nullptr, &dest);
     }
+
+    // Draw score
+    auto text = "Score: " + std::to_string(score);
+    SDL_Color color = {255, 255, 255};
+    SDL_Surface *surface = TTF_RenderText_Solid(scoreFont, text.c_str(), color);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(game.getRenderer(), surface);
+    SDL_Rect rect = {game.getWindowWidth() - 10 - surface->w, 10, surface->w, surface->h};
+    SDL_RenderCopy(game.getRenderer(), texture, nullptr, &rect);
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
 }

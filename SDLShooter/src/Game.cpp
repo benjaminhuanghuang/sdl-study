@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <SDL_ttf.h>
 
 Game::Game() {}
 
@@ -77,6 +78,11 @@ void Game::init()
     Mix_AllocateChannels(16);
     Mix_Volume(-1, MIX_MAX_VOLUME / 4); // volume of sound effect
 
+    if (TTF_Init() == -1)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "TTF_Init failed: %s", TTF_GetError());
+        isRunning = false;
+    }
     // Init background
     nearStars.texture = IMG_LoadTexture(renderer, "assets/image/Stars-A.png");
     SDL_QueryTexture(nearStars.texture, nullptr, nullptr, &nearStars.width, &nearStars.height);
@@ -109,6 +115,9 @@ void Game::clean()
     // Clean Mixer
     Mix_CloseAudio();
     Mix_Quit();
+
+    // Clean TTF
+    TTF_Quit();
 
     // Clean SDL
     SDL_DestroyRenderer(renderer);
