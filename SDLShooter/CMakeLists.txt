@@ -25,7 +25,9 @@ find_package(SDL2_ttf REQUIRED)
 add_executable(${TARGET}
     "src/main.cpp"
     "src/Game.cpp"
+    "src/Scene.cpp"
     "src/SceneMain.cpp"
+    "src/SceneTitle.cpp"
 )
 
 target_link_libraries(${TARGET} ${SDL2_LIBRARIES} SDL2_image::SDL2_image SDL2_mixer::SDL2_mixer SDL2_ttf::SDL2_ttf)

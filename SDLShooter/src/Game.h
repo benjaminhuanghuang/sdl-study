@@ -3,6 +3,11 @@
 
 #include "Scene.h"
 #include "Object.h"
+#include <SDL.h>
+#include <SDL_mixer.h>
+#include <SDL_ttf.h>
+#include <string>
+
 class Game
 {
 public:
@@ -20,6 +25,7 @@ public:
 
     void handleEvent(SDL_Event *event);
     void update(float deltaTime);
+    void renderTextCentered(std::string text, float posY, bool isTitle);
 
     void render();
 
@@ -33,6 +39,9 @@ private:
     // Disable copy constructor and copy assignment operator
     Game(const Game &) = delete;
     Game &operator=(const Game &) = delete;
+
+    TTF_Font *titleFont;
+    TTF_Font *textFont;
 
     bool isRunning = true;
     Scene *currentScene = nullptr;

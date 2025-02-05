@@ -10,14 +10,11 @@
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
 
-class Game;
-
 class SceneMain : public Scene
 {
 public:
     SceneMain();
     ~SceneMain();
-
     void init() override;
     void update(float deltaTime) override;
     void render() override;
@@ -25,7 +22,6 @@ public:
     void handleEvent(SDL_Event *event) override;
 
 private:
-    Game &game;
     Player player;
     Mix_Music *bgm;
     SDL_Texture *uiHealth;

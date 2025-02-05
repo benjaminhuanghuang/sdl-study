@@ -4,10 +4,6 @@
 #include "Game.h"
 #include <SDL.h>
 
-SceneMain::SceneMain() : game(Game::getInstance())
-{
-}
-
 SceneMain::~SceneMain()
 {
 }

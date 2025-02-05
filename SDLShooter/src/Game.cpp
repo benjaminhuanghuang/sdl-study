@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "SceneMain.h"
+#include "SceneTitle.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
@@ -90,8 +91,11 @@ void Game::init()
     SDL_QueryTexture(farStars.texture, nullptr, nullptr, &farStars.width, &farStars.height);
     farStars.speed = 20;
 
+    titleFont = TTF_OpenFont("assets/font/VonwaonBitmap-16px.ttf", 64);
+    textFont = TTF_OpenFont("assets/font/VonwaonBitmap-16px.ttf", 32);
+
     isRunning = true;
-    currentScene = new SceneMain();
+    currentScene = new SceneTitle();
     currentScene->init();
 }
 
@@ -197,4 +201,19 @@ void Game::renderBackground()
             SDL_RenderCopy(renderer, nearStars.texture, nullptr, &dstRect);
         };
     }
+}
+
+void Game::renderTextCentered(std::string text, float posY, bool isTitle)
+{
+    SDL_Color color = {255, 255, 255, 255};
+    TTF_Font *font = isTitle ? titleFont : textFont;
+    SDL_Surface *surface = TTF_RenderText_Solid(font, text.c_str(), color);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+    int y = static_cast<int>(getWindowHeight() - surface->h) * posY;
+    SDL_Rect dstRect = {getWindowWidth() / 2 - surface->w / 2, y, surface->w, surface->h};
+
+    SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
 }
