@@ -1,6 +1,7 @@
 #include "SceneTitle.h"
 #include <string>
 #include "Game.h"
+#include "SceneMain.h"
 
 void SceneTitle::init()
 {
@@ -32,4 +33,12 @@ void SceneTitle::clean()
 
 void SceneTitle::handleEvent(SDL_Event *event)
 {
+    if (event->type == SDL_KEYDOWN)
+    {
+        if (event->key.keysym.scancode == SDL_SCANCODE_J)
+        {
+            auto sceneMain = new SceneMain();
+            game.changeScene(sceneMain);
+        }
+    }
 }

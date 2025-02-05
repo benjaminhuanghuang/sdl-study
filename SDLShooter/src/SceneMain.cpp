@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include "Game.h"
 #include <SDL.h>
+#include "SceneTitle.h"
 
 SceneMain::~SceneMain()
 {
@@ -217,6 +218,14 @@ void SceneMain::clean()
 
 void SceneMain::handleEvent(SDL_Event *event)
 {
+    if (event->type == SDL_KEYDOWN)
+    {
+        if (event->key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+        {
+            auto sceneTitle = new SceneTitle();
+            game.changeScene(sceneTitle);
+        }
+    }
 }
 
 void SceneMain::keyboardControl(float deltaTime)

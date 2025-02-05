@@ -13,7 +13,6 @@
 class SceneMain : public Scene
 {
 public:
-    SceneMain();
     ~SceneMain();
     void init() override;
     void update(float deltaTime) override;
