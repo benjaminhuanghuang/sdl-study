@@ -24,15 +24,18 @@ public:
     void updatePlayerProjectiles(float deltaTime);
     void renderPlayerProjectiles();
     void spawnEnemy();
+    void updatePlayer(float deltaTime);
     void updateEnemyProjectiles(float deltaTime);
     void renderEnemyProjectiles();
     void updateEnemies(float deltaTime);
     void shootEnemy(Enemy *enemy);
     SDL_FPoint getDirection(Enemy *enemy);
+    void enemyExplode(Enemy *enemy);
 
 private:
     Game &game;
     Player player;
+    bool isDead = false;
     std::mt19937 randomEngine;
     std::uniform_real_distribution<float> dist;
     // Object template

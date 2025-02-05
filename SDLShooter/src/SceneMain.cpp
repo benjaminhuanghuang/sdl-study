@@ -2,6 +2,7 @@
 #include <iostream>
 #include <SDL_image.h>
 #include "Game.h"
+#include <SDL.h>
 
 SceneMain::SceneMain() : game(Game::getInstance())
 {
@@ -52,14 +53,17 @@ void SceneMain::update(float deltaTime)
     updateEnemyProjectiles(deltaTime);
     spawnEnemy();
     updateEnemies(deltaTime);
+    updatePlayer(deltaTime);
 }
 
 void SceneMain::render()
 {
     // Render player
-    SDL_Rect playerRect = {static_cast<int>(player.position.x), static_cast<int>(player.position.y), player.width, player.height};
-    SDL_RenderCopy(game.getRenderer(), player.texture, nullptr, &playerRect);
-
+    if (!isDead)
+    {
+        SDL_Rect playerRect = {static_cast<int>(player.position.x), static_cast<int>(player.position.y), player.width, player.height};
+        SDL_RenderCopy(game.getRenderer(), player.texture, nullptr, &playerRect);
+    }
     renderPlayerProjectiles();
 
     // Render enemies
@@ -128,6 +132,7 @@ void SceneMain::handleEvent(SDL_Event *event)
 
 void SceneMain::keyboardControl(float deltaTime)
 {
+
     auto keyboardState = SDL_GetKeyboardState(nullptr);
 
     if (keyboardState[SDL_SCANCODE_W])
@@ -199,7 +204,34 @@ void SceneMain::updatePlayerProjectiles(float deltaTime)
         }
         else
         {
-            ++it;
+            bool hit = false; // Determine if the bullet hit any enemy
+            for (auto enemy : enemies)
+            {
+                SDL_Rect enemyRect = {
+                    static_cast<int>(enemy->position.x),
+                    static_cast<int>(enemy->position.y),
+                    enemy->width,
+                    enemy->height};
+
+                SDL_Rect projectileRect = {
+                    static_cast<int>(projectile->position.x),
+                    static_cast<int>(projectile->position.y),
+                    projectile->width,
+                    projectile->height};
+                if (SDL_HasIntersection(&enemyRect, &projectileRect))
+                {
+                    hit = true;
+                    enemy->currentHealth -= projectile->damage;
+                    delete projectile;
+                    it = projectilesPlayer.erase(it);
+                    SDL_Log("Enemy hit");
+                    break;
+                }
+            }
+            if (!hit)
+            {
+                ++it;
+            }
         }
     }
 }
@@ -231,6 +263,35 @@ void SceneMain::spawnEnemy()
     enemies.push_back(enemy);
 }
 
+void SceneMain::updatePlayer(float deltaTime)
+{
+    if (isDead)
+        return;
+
+    if (player.currentHealth <= 0)
+    {
+        isDead = true;
+    }
+    for (auto enemy : enemies)
+    {
+        SDL_Rect playerRect = {
+            static_cast<int>(player.position.x),
+            static_cast<int>(player.position.y),
+            player.width,
+            player.height};
+        SDL_Rect enemyRect = {
+            static_cast<int>(enemy->position.x),
+            static_cast<int>(enemy->position.y),
+            enemy->width,
+            enemy->height};
+        if (SDL_HasIntersection(&playerRect, &enemyRect))
+        {
+            player.currentHealth -= 1;
+            enemy->currentHealth = 0;
+        }
+    }
+}
+
 void SceneMain::updateEnemies(float deltaTime)
 {
     auto currTime = SDL_GetTicks();
@@ -247,12 +308,20 @@ void SceneMain::updateEnemies(float deltaTime)
         else
         {
             // Enemy fire
-            if (currTime - enemy->lastShotTime > enemy->coolDown)
+            if (currTime - enemy->lastShotTime > enemy->coolDown && !isDead)
             {
                 shootEnemy(enemy);
                 enemy->lastShotTime = currTime;
             }
-            ++it;
+            if (enemy->currentHealth <= 0)
+            {
+                enemyExplode(enemy);
+                it = enemies.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
         }
     }
 }
@@ -295,7 +364,27 @@ void SceneMain::updateEnemyProjectiles(float deltaTime)
         }
         else
         {
-            ++it;
+            SDL_Rect playerRect = {
+                static_cast<int>(player.position.x),
+                static_cast<int>(player.position.y),
+                player.width,
+                player.height};
+            SDL_Rect projectileRect = {
+                static_cast<int>(projectile->position.x),
+                static_cast<int>(projectile->position.y),
+                projectile->width,
+                projectile->height};
+            if (SDL_HasIntersection(&playerRect, &projectileRect) && !isDead)
+            {
+                // Player is hit, remove the enemy bullet
+                player.currentHealth -= projectile->damage;
+                delete projectile;
+                it = projectilesEnemy.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
         }
     }
 }
@@ -313,4 +402,9 @@ void SceneMain::renderEnemyProjectiles()
         float angle = atan2(projectile->direction.y, projectile->direction.x) * 180 / M_PI - 90;
         SDL_RenderCopyEx(game.getRenderer(), projectile->texture, nullptr, &projectileRect, angle, nullptr, SDL_FLIP_NONE);
     }
+}
+
+void SceneMain::enemyExplode(Enemy *enemy)
+{
+    delete enemy;
 }
