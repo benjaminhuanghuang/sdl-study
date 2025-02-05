@@ -50,6 +50,12 @@ void SceneMain::init()
     SDL_QueryTexture(explosionTemplate.texture, nullptr, nullptr, &explosionTemplate.width, &explosionTemplate.height);
     explosionTemplate.totalFrame = explosionTemplate.width / explosionTemplate.height;
     explosionTemplate.width = explosionTemplate.height;
+
+    // Template for item
+    itemLifeTemplate.texture = IMG_LoadTexture(game.getRenderer(), "assets/image/bonus_life.png");
+    SDL_QueryTexture(itemLifeTemplate.texture, nullptr, nullptr, &itemLifeTemplate.width, &itemLifeTemplate.height);
+    itemLifeTemplate.width /= 4;
+    itemLifeTemplate.height /= 4;
 }
 
 void SceneMain::update(float deltaTime)
@@ -81,7 +87,7 @@ void SceneMain::render()
     }
     // Render enemy projectiles
     renderEnemyProjectiles();
-
+    renderItems();
     renderExplosions();
 }
 void SceneMain::clean()
@@ -125,6 +131,15 @@ void SceneMain::clean()
         }
     }
     explosions.clear();
+    // Clean items
+    for (auto &item : items)
+    {
+        if (item != nullptr)
+        {
+            delete item;
+        }
+    }
+    items.clear();
 
     // Clean  the texture
     if (player.texture != nullptr)
@@ -146,6 +161,10 @@ void SceneMain::clean()
     if (explosionTemplate.texture)
     {
         SDL_DestroyTexture(explosionTemplate.texture);
+    }
+    if (itemLifeTemplate.texture)
+    {
+        SDL_DestroyTexture(itemLifeTemplate.texture);
     }
 }
 
@@ -443,6 +462,11 @@ void SceneMain::enemyExplode(Enemy *enemy)
     explosion->startTime = SDL_GetTicks();
     explosions.push_back(explosion);
 
+    if (dist(randomEngine) < 0.3f)
+    {
+        dropItem(enemy);
+    }
+
     delete enemy;
 }
 
@@ -481,5 +505,97 @@ void SceneMain::renderExplosions()
             explosion->width,
             explosion->height};
         SDL_RenderCopy(game.getRenderer(), explosion->texture, &src, &dest);
+    }
+}
+
+void SceneMain::dropItem(Enemy *enemy)
+{
+    auto *item = new Item(itemLifeTemplate);
+    item->position.x = enemy->position.x + enemy->width / 2 - item->width / 2;
+    item->position.y = enemy->position.y + enemy->height / 2 - item->height / 2;
+    float angle = dist(randomEngine) * 2 * M_PI;
+    item->direction = {cos(angle), sin(angle)};
+    items.push_back(item);
+}
+
+void SceneMain::updateItems(float deltaTime)
+{
+    for (auto it = items.begin(); it != items.end();)
+    {
+        auto item = *it;
+        // Update item position
+        item->position.x += item->direction.x * item->speed * deltaTime;
+        item->position.y += item->direction.y * item->speed * deltaTime;
+        // Bounce back when hit the wall
+        if (item->bounceCount > 0)
+        {
+            if (item->position.x < 0 || item->position.x > game.getWindowWidth() - item->width)
+            {
+                item->direction.x *= -1;
+                item->bounceCount--;
+            }
+            if (item->position.y < 0 || item->position.y > game.getWindowHeight() - item->height)
+            {
+                item->direction.y *= -1;
+                item->bounceCount--;
+            }
+        }
+        // Delete item when out of screen
+        if (item->position.x + item->width < 0 ||
+            item->position.x > game.getWindowWidth() ||
+            item->position.y + item->height < 0 ||
+            item->position.y > game.getWindowHeight())
+        {
+            delete item;
+            it = items.erase(it);
+        }
+        else
+        {
+            SDL_Rect playerRect = {
+                static_cast<int>(player.position.x),
+                static_cast<int>(player.position.y),
+                player.width,
+                player.height};
+            SDL_Rect itemRect = {
+                static_cast<int>(item->position.x),
+                static_cast<int>(item->position.y),
+                item->width,
+                item->height};
+            if (SDL_HasIntersection(&playerRect, &itemRect))
+            {
+                playerGetItem(item);
+                delete item;
+                it = items.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+    }
+}
+
+void SceneMain::playerGetItem(Item *item)
+{
+    if (item->type == ItemType::Life)
+    {
+        player.currentHealth += 1;
+        if (player.currentHealth > player.maxHealth)
+        {
+            player.currentHealth = player.maxHealth;
+        }
+    }
+}
+
+void SceneMain::renderItems()
+{
+    for (auto item : items)
+    {
+        SDL_Rect itemRect = {
+            static_cast<int>(item->position.x),
+            static_cast<int>(item->position.y),
+            item->width,
+            item->height};
+        SDL_RenderCopy(game.getRenderer(), item->texture, nullptr, &itemRect);
     }
 }

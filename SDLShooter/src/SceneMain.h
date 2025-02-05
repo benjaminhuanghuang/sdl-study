@@ -29,10 +29,14 @@ public:
     void updateExplosions(float deltaTime);
     void renderEnemyProjectiles();
     void updateEnemies(float deltaTime);
+    void updateItems(float deltaTime);
     void shootEnemy(Enemy *enemy);
     SDL_FPoint getDirection(Enemy *enemy);
     void enemyExplode(Enemy *enemy);
     void renderExplosions();
+    void dropItem(Enemy *enemy);
+    void playerGetItem(Item *item);
+    void renderItems();
 
 private:
     Game &game;
@@ -45,10 +49,12 @@ private:
     Enemy enemyTemplate;
     ProjectileEnemy projectileEnemyTemplate;
     Explosion explosionTemplate;
+    Item itemLifeTemplate;
 
     std::list<ProjectilePlayer *> projectilesPlayer;
     std::list<Enemy *> enemies;
     std::list<ProjectileEnemy *> projectilesEnemy;
     std::list<Explosion *> explosions;
+    std::list<Item *> items;
 };
 #endif // SCENE_MAIN_H

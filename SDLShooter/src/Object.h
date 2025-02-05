@@ -9,6 +9,7 @@ struct Player
     int height = 0;
     int speed = 300;
     int currentHealth = 3;
+    int maxHealth = 3;
     Uint32 coolDown = 300;
     Uint32 lastShotTime = 0;
 };
@@ -56,5 +57,24 @@ struct Explosion
     int currentFrame = 0;
     Uint32 startTime = 0;
     Uint32 FPS = 10;
+};
+
+enum class ItemType
+{
+    Life,
+    Shield,
+    Time
+};
+
+struct Item
+{
+    SDL_Texture *texture = nullptr;
+    SDL_FPoint position = {0, 0};
+    SDL_FPoint direction = {0, 0};
+    int speed = 200;
+    int bounceCount = 3;
+    int width = 0;
+    int height = 0;
+    ItemType type = ItemType::Life;
 };
 #endif // OBJECT_H
