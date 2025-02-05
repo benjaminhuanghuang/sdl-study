@@ -4,7 +4,10 @@
 #include "Scene.h"
 #include "Object.h"
 #include <list>
+#include <map>
 #include <random>
+#include <SDL.h>
+#include <SDL_mixer.h>
 
 class Game;
 
@@ -41,6 +44,7 @@ public:
 private:
     Game &game;
     Player player;
+    Mix_Music *bgm;
     bool isDead = false;
     std::mt19937 randomEngine;
     std::uniform_real_distribution<float> dist;
@@ -56,5 +60,6 @@ private:
     std::list<ProjectileEnemy *> projectilesEnemy;
     std::list<Explosion *> explosions;
     std::list<Item *> items;
+    std::map<std::string, Mix_Chunk *> sounds;
 };
 #endif // SCENE_MAIN_H
