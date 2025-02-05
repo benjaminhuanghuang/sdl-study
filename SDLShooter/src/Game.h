@@ -2,7 +2,7 @@
 #define GAME_H
 
 #include "Scene.h"
-
+#include "Object.h"
 class Game
 {
 public:
@@ -20,7 +20,9 @@ public:
 
     void handleEvent(SDL_Event *event);
     void update(float deltaTime);
+    void backgroundUpdate(float deltaTime);
     void render();
+    void renderBackground();
     SDL_Window *getWindow() const { return window; }
     SDL_Renderer *getRenderer() const { return renderer; }
     int getWindowWidth() const { return windowWidth; }
@@ -39,6 +41,9 @@ private:
     int FPS = 60;
     Uint32 frameTime;
     float deltaTime;
+
+    Background nearStars;
+    Background farStars;
 };
 
 #endif // GAME_H

@@ -40,11 +40,14 @@ public:
     void dropItem(Enemy *enemy);
     void playerGetItem(Item *item);
     void renderItems();
+    void renderUI();
 
 private:
     Game &game;
     Player player;
     Mix_Music *bgm;
+    SDL_Texture *uiHealth;
+
     bool isDead = false;
     std::mt19937 randomEngine;
     std::uniform_real_distribution<float> dist;

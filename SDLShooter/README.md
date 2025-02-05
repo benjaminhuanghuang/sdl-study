@@ -22,3 +22,15 @@ cmake --build build
 ## FPS
 
 Game.run
+
+## Collision
+
+```c
+if (SDL_HasIntersection(&playerRect, &enemyRect)) {
+
+}
+```
+
+## Music
+
+## Background scrolling
