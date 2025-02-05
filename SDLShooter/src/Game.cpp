@@ -65,7 +65,7 @@ void Game::init()
         isRunning = false;
     }
     // Init music
-    if (Mix_Init(MIX_INIT_MP3 | MIX_INIT_OGG) != MIX_INIT_MP3 | MIX_INIT_OGG)
+    if (Mix_Init(MIX_INIT_MP3 | MIX_INIT_OGG) != (MIX_INIT_MP3 | MIX_INIT_OGG))
     {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Mix_Init failed: %s", Mix_GetError());
         isRunning = false;

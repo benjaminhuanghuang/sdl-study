@@ -16,5 +16,6 @@ public:
 
 private:
     Mix_Music *bgm;
+    float timer = 0;
 };
 #endif // SCENE_TITLE_H

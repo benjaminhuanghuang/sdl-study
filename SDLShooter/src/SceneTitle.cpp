@@ -11,6 +11,11 @@ void SceneTitle::init()
 
 void SceneTitle::update(float deltaTime)
 {
+    timer += deltaTime;
+    if (timer > 1.0f)
+    {
+        timer -= 1.0f;
+    }
 }
 
 void SceneTitle::render()
@@ -18,8 +23,11 @@ void SceneTitle::render()
     std::string title = "SDL Shooter";
     game.renderTextCentered(title, 0.2f, true);
 
-    std::string instruction = "Press J to start";
-    game.renderTextCentered(instruction, 0.6f, false);
+    if (timer < 0.5f)
+    {
+        std::string instruction = "Press J to start";
+        game.renderTextCentered(instruction, 0.6f, false);
+    }
 }
 
 void SceneTitle::clean()
