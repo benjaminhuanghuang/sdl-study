@@ -24,7 +24,11 @@ public:
     void updatePlayerProjectiles(float deltaTime);
     void renderPlayerProjectiles();
     void spawnEnemy();
+    void updateEnemyProjectiles(float deltaTime);
+    void renderEnemyProjectiles();
     void updateEnemies(float deltaTime);
+    void shootEnemy(Enemy *enemy);
+    SDL_FPoint getDirection(Enemy *enemy);
 
 private:
     Game &game;
@@ -34,8 +38,10 @@ private:
     // Object template
     ProjectilePlayer projectilePlayerTemplate;
     Enemy enemyTemplate;
+    ProjectileEnemy projectileEnemyTemplate;
 
     std::list<ProjectilePlayer *> projectilesPlayer;
     std::list<Enemy *> enemies;
+    std::list<ProjectileEnemy *> projectilesEnemy;
 };
 #endif // SCENE_MAIN_H
