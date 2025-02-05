@@ -26,11 +26,13 @@ public:
     void spawnEnemy();
     void updatePlayer(float deltaTime);
     void updateEnemyProjectiles(float deltaTime);
+    void updateExplosions(float deltaTime);
     void renderEnemyProjectiles();
     void updateEnemies(float deltaTime);
     void shootEnemy(Enemy *enemy);
     SDL_FPoint getDirection(Enemy *enemy);
     void enemyExplode(Enemy *enemy);
+    void renderExplosions();
 
 private:
     Game &game;
@@ -42,9 +44,11 @@ private:
     ProjectilePlayer projectilePlayerTemplate;
     Enemy enemyTemplate;
     ProjectileEnemy projectileEnemyTemplate;
+    Explosion explosionTemplate;
 
     std::list<ProjectilePlayer *> projectilesPlayer;
     std::list<Enemy *> enemies;
     std::list<ProjectileEnemy *> projectilesEnemy;
+    std::list<Explosion *> explosions;
 };
 #endif // SCENE_MAIN_H
