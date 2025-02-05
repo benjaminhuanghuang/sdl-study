@@ -23,25 +23,6 @@ public:
     void render() override;
     void clean() override;
     void handleEvent(SDL_Event *event) override;
-    void keyboardControl(float deltaTime);
-    void shoot();
-    void updatePlayerProjectiles(float deltaTime);
-    void renderPlayerProjectiles();
-    void spawnEnemy();
-    void updatePlayer(float deltaTime);
-    void updateEnemyProjectiles(float deltaTime);
-    void updateExplosions(float deltaTime);
-    void renderEnemyProjectiles();
-    void updateEnemies(float deltaTime);
-    void updateItems(float deltaTime);
-    void shootEnemy(Enemy *enemy);
-    SDL_FPoint getDirection(Enemy *enemy);
-    void enemyExplode(Enemy *enemy);
-    void renderExplosions();
-    void dropItem(Enemy *enemy);
-    void playerGetItem(Item *item);
-    void renderItems();
-    void renderUI();
 
 private:
     Game &game;
@@ -67,5 +48,29 @@ private:
     std::list<Explosion *> explosions;
     std::list<Item *> items;
     std::map<std::string, Mix_Chunk *> sounds;
+
+    // Update
+    void updatePlayerProjectiles(float deltaTime);
+    void updatePlayer(float deltaTime);
+    void updateEnemyProjectiles(float deltaTime);
+    void updateExplosions(float deltaTime);
+    void updateEnemies(float deltaTime);
+    void updateItems(float deltaTime);
+    void spawnEnemy();
+    void keyboardControl(float deltaTime);
+
+    // Render
+    void renderPlayerProjectiles();
+    void renderExplosions();
+    void renderEnemyProjectiles();
+    void renderItems();
+    void renderUI();
+    // others
+    void shoot();
+    void shootEnemy(Enemy *enemy);
+    SDL_FPoint getDirection(Enemy *enemy);
+    void enemyExplode(Enemy *enemy);
+    void dropItem(Enemy *enemy);
+    void playerGetItem(Item *item);
 };
 #endif // SCENE_MAIN_H

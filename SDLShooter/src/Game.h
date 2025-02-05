@@ -20,9 +20,9 @@ public:
 
     void handleEvent(SDL_Event *event);
     void update(float deltaTime);
-    void backgroundUpdate(float deltaTime);
+
     void render();
-    void renderBackground();
+
     SDL_Window *getWindow() const { return window; }
     SDL_Renderer *getRenderer() const { return renderer; }
     int getWindowWidth() const { return windowWidth; }
@@ -30,8 +30,10 @@ public:
 
 private:
     Game();
+    // Disable copy constructor and copy assignment operator
     Game(const Game &) = delete;
     Game &operator=(const Game &) = delete;
+
     bool isRunning = true;
     Scene *currentScene = nullptr;
     SDL_Window *window = nullptr;
@@ -44,6 +46,9 @@ private:
 
     Background nearStars;
     Background farStars;
+
+    void backgroundUpdate(float deltaTime);
+    void renderBackground();
 };
 
 #endif // GAME_H
