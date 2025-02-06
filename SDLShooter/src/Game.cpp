@@ -11,6 +11,7 @@ Game::Game() {}
 
 Game::~Game()
 {
+    saveData();
     clean();
 }
 
@@ -60,6 +61,9 @@ void Game::init()
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Renderer created failed: %s", SDL_GetError());
         isRunning = false;
     }
+    // Set logic resolution, for full screen
+    SDL_RenderSetLogicalSize(renderer, windowWidth, windowHeight);
+
     if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG)
     {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "IMG_Init failed: %s", IMG_GetError());
@@ -95,6 +99,7 @@ void Game::init()
     titleFont = TTF_OpenFont("assets/font/VonwaonBitmap-16px.ttf", 64);
     textFont = TTF_OpenFont("assets/font/VonwaonBitmap-16px.ttf", 32);
 
+    loadData();
     isRunning = true;
     currentScene = new SceneTitle();
     currentScene->init();
@@ -148,6 +153,17 @@ void Game::handleEvent(SDL_Event *event)
         if (event->type == SDL_QUIT)
         {
             isRunning = false;
+        }
+        if (event->type == SDL_KEYDOWN)
+        {
+            if (event->key.keysym.scancode == SDL_SCANCODE_F4)
+            {
+                isFullscreen = !isFullscreen;
+                if (isFullscreen)
+                    SDL_SetWindowFullscreen(window, 0);
+                else
+                    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+            }
         }
         currentScene->handleEvent(event);
     }
@@ -221,7 +237,7 @@ SDL_Point Game::renderTextCentered(std::string text, float posY, bool isTitle)
     return {dstRect.x + dstRect.w, y};
 }
 
-void Game::renderTextPos(std::string text, int posX, int posY, bool isLeft = true)
+void Game::renderTextPos(std::string text, int posX, int posY, bool isLeft)
 {
     SDL_Color color = {255, 255, 255, 255};
     SDL_Surface *surface = TTF_RenderText_Solid(textFont, text.c_str(), color);

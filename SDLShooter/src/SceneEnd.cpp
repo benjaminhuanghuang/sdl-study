@@ -5,6 +5,13 @@
 
 void SceneEnd::init()
 {
+    bgm = Mix_LoadMUS("assets/music/06_Battle_in_Space_Intro.ogg");
+    if (!bgm)
+    {
+        SDL_Log("Failed to load music: %s", Mix_GetError());
+    }
+    Mix_PlayMusic(bgm, -1);
+
     // start input
     if (!SDL_IsTextInputActive())
     {
@@ -34,6 +41,11 @@ void SceneEnd::render()
 
 void SceneEnd::clean()
 {
+    if (bgm != nullptr)
+    {
+        Mix_HaltMusic();
+        Mix_FreeMusic(bgm);
+    }
 }
 
 void SceneEnd::handleEvent(SDL_Event *event)
@@ -114,7 +126,7 @@ void SceneEnd::renderPhase2()
         std::string score = std::to_string(item.first);
         game.renderTextPos(name, 100, posY);
         game.renderTextPos(score, 100, posY, false);
-        posY += 40;
+        posY += 45;
         i++;
     }
     if (blinkTimer < 0.5f)

@@ -60,6 +60,7 @@ private:
     Uint32 frameTime;
     float deltaTime;
     int finalScore = 0;
+    bool isFullscreen = false;
 
     Background nearStars;
     Background farStars;

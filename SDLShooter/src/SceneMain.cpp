@@ -19,8 +19,8 @@ void SceneMain::init()
     // Load player
     player.texture = IMG_LoadTexture(game.getRenderer(), "assets/image/SpaceShip.png");
     SDL_QueryTexture(player.texture, nullptr, nullptr, &player.width, &player.height);
-    player.width /= 4;
-    player.height /= 4;
+    player.width /= 5;
+    player.height /= 5;
     player.position.x = game.getWindowWidth() / 2 - player.width / 2;
     player.position.y = game.getWindowHeight() - player.height;
 
@@ -40,12 +40,13 @@ void SceneMain::init()
     // Template for enemy projectile
     projectileEnemyTemplate.texture = IMG_LoadTexture(game.getRenderer(), "assets/image/bullet-1.png");
     SDL_QueryTexture(projectileEnemyTemplate.texture, nullptr, nullptr, &projectileEnemyTemplate.width, &projectileEnemyTemplate.height);
-    projectileEnemyTemplate.width /= 4;
-    projectileEnemyTemplate.height /= 4;
+    projectileEnemyTemplate.width /= 2;
+    projectileEnemyTemplate.height /= 2;
 
     // Template for explosion
     explosionTemplate.texture = IMG_LoadTexture(game.getRenderer(), "assets/effect/explosion.png");
     SDL_QueryTexture(explosionTemplate.texture, nullptr, nullptr, &explosionTemplate.width, &explosionTemplate.height);
+    explosionTemplate.height *= 2;
     explosionTemplate.totalFrame = explosionTemplate.width / explosionTemplate.height;
     explosionTemplate.width = explosionTemplate.height;
 
@@ -563,8 +564,8 @@ void SceneMain::renderExplosions()
         SDL_Rect src = {
             explosion->currentFrame * explosion->width,
             0,
-            explosion->width,
-            explosion->height};
+            explosion->width / 2,
+            explosion->height / 2};
 
         SDL_Rect dest = {
             static_cast<int>(explosion->position.x),
