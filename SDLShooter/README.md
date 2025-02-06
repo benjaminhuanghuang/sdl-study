@@ -25,7 +25,7 @@ Game.run
 
 ## Collision
 
-```c
+```cpp
 if (SDL_HasIntersection(&playerRect, &enemyRect)) {
 
 }
@@ -34,3 +34,7 @@ if (SDL_HasIntersection(&playerRect, &enemyRect)) {
 ## Music
 
 ## Background scrolling
+
+## Input
+
+## Save/load data
