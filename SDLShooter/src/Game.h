@@ -39,6 +39,7 @@ public:
     int getWindowHeight() const { return windowHeight; }
     int getFinalScore() const { return finalScore; }
     std::multimap<int, std::string, std::greater<int>> &getLeaderBoard() { return leaderBoard; }
+    void insertLeaderBoard(int score, std::string name);
 
 private:
     Game();
@@ -67,7 +68,8 @@ private:
     std::multimap<int, std::string, std::greater<int>> leaderBoard;
     void backgroundUpdate(float deltaTime);
     void renderBackground();
-    void insertLeaderBoard(int score, std::string name);
+    void saveData();
+    void loadData();
 };
 
 #endif // GAME_H

@@ -55,6 +55,7 @@ void SceneEnd::handleEvent(SDL_Event *event)
                 {
                     playerName = "Anon-Player";
                 }
+                game.insertLeaderBoard(game.getFinalScore(), playerName);
             }
             else if (event->key.keysym.scancode == SDL_SCANCODE_BACKSPACE)
             {
@@ -113,10 +114,13 @@ void SceneEnd::renderPhase2()
         std::string score = std::to_string(item.first);
         game.renderTextPos(name, 100, posY);
         game.renderTextPos(score, 100, posY, false);
-        posY += 50;
+        posY += 40;
+        i++;
     }
-
-    game.renderTextCentered("Press J back to new game", 0.9, false);
+    if (blinkTimer < 0.5f)
+    {
+        game.renderTextCentered("Press J back to new game", 0.9, false);
+    }
 }
 
 void SceneEnd::removeLastUTF8Char(std::string &str)

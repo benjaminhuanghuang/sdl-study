@@ -5,6 +5,7 @@
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
+#include <fstream>
 
 Game::Game() {}
 
@@ -247,5 +248,37 @@ void Game::insertLeaderBoard(int score, std::string name)
     if (leaderBoard.size() > 8)
     {
         leaderBoard.erase(std::prev(leaderBoard.end()));
+    }
+}
+
+void Game::saveData()
+{
+    std::ofstream file("leaderboard.txt");
+    if (!file.is_open())
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "File open failed: %s", SDL_GetError());
+        return;
+    }
+    for (auto item : leaderBoard)
+    {
+        // fprintf(file, "%d %s\n", item.first, item.second.c_str());
+        file << item.first << " " << item.second << std::endl;
+    }
+}
+
+void Game::loadData()
+{
+    std::ifstream file("leaderboard.txt");
+    if (!file.is_open())
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "File open failed: %s", SDL_GetError());
+        return;
+    }
+    leaderBoard.clear();
+    int score;
+    std::string name;
+    while (file >> score >> name)
+    {
+        leaderBoard.insert({score, name});
     }
 }
