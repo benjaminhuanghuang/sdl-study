@@ -28,11 +28,14 @@ public:
     void renderTextCentered(std::string text, float posY, bool isTitle);
 
     void render();
-
+    // setters
+    void setFinalScore(int score) { finalScore = score; }
+    // getters
     SDL_Window *getWindow() const { return window; }
     SDL_Renderer *getRenderer() const { return renderer; }
     int getWindowWidth() const { return windowWidth; }
     int getWindowHeight() const { return windowHeight; }
+    int getFinalScore() const { return finalScore; }
 
 private:
     Game();
@@ -52,6 +55,7 @@ private:
     int FPS = 60;
     Uint32 frameTime;
     float deltaTime;
+    int finalScore = 0;
 
     Background nearStars;
     Background farStars;

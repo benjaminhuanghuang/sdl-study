@@ -11,5 +11,10 @@ public:
     void render() override;
     void clean() override;
     void handleEvent(SDL_Event *event) override;
+
+private:
+    bool isTyping = true;
+    void renderPhase1();
+    void renderPhase2();
 };
 #endif // SCENEEND_H

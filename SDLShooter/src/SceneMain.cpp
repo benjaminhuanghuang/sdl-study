@@ -4,6 +4,7 @@
 #include "Game.h"
 #include <SDL.h>
 #include "SceneTitle.h"
+#include "SceneEnd.h"
 
 SceneMain::~SceneMain()
 {
@@ -87,6 +88,11 @@ void SceneMain::update(float deltaTime)
     updateEnemies(deltaTime);
     updatePlayer(deltaTime);
     updateExplosions(deltaTime);
+    updateItems(deltaTime);
+    if (isDead)
+    {
+        changeSceneDelayed(deltaTime, 3);
+    }
 }
 
 void SceneMain::render()
@@ -378,6 +384,7 @@ void SceneMain::updatePlayer(float)
         explosion->startTime = SDL_GetTicks();
         explosions.push_back(explosion);
         Mix_PlayChannel(-1, sounds["player_explode"], 0);
+        game.setFinalScore(score);
         return;
     }
     for (auto enemy : enemies)
@@ -689,4 +696,14 @@ void SceneMain::renderUI()
     SDL_RenderCopy(game.getRenderer(), texture, nullptr, &rect);
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(texture);
+}
+
+void SceneMain::changeSceneDelayed(float deltaTime, float delay)
+{
+    timerEnd += deltaTime;
+    if (timerEnd > delay)
+    {
+        auto sceneEnd = new SceneEnd();
+        game.changeScene(sceneEnd);
+    }
 }

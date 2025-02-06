@@ -26,6 +26,7 @@ private:
     SDL_Texture *uiHealth;
     TTF_Font *scoreFont;
     int score = 0;
+    float timerEnd = 0;
 
     bool isDead = false;
     std::mt19937 randomEngine;
@@ -53,6 +54,7 @@ private:
     void updateItems(float deltaTime);
     void spawnEnemy();
     void keyboardControl(float deltaTime);
+    void changeSceneDelayed(float deltaTime, float delay);
 
     // Render
     void renderPlayerProjectiles();
