@@ -1,5 +1,6 @@
 #include "SceneEnd.h"
 #include "Game.h"
+#include "SceneMain.h"
 #include <string>
 
 void SceneEnd::init()
@@ -13,6 +14,11 @@ void SceneEnd::init()
 
 void SceneEnd::update(float deltaTime)
 {
+    blinkTimer -= deltaTime;
+    if (blinkTimer < 0)
+    {
+        blinkTimer += 1.0f;
+    }
 }
 void SceneEnd::render()
 {
@@ -45,6 +51,10 @@ void SceneEnd::handleEvent(SDL_Event *event)
             {
                 isTyping = false;
                 SDL_StopTextInput();
+                if (playerName == "")
+                {
+                    playerName = "Anon-Player";
+                }
             }
             else if (event->key.keysym.scancode == SDL_SCANCODE_BACKSPACE)
             {
@@ -54,6 +64,14 @@ void SceneEnd::handleEvent(SDL_Event *event)
     }
     else
     {
+        if (event->type == SDL_KEYDOWN)
+        {
+            if (event->key.keysym.scancode == SDL_SCANCODE_J)
+            {
+                auto sceneMain = new SceneMain();
+                game.changeScene(sceneMain);
+            }
+        }
     }
 }
 
@@ -70,12 +88,35 @@ void SceneEnd::renderPhase1()
 
     if (playerName != "")
     {
-        std::string playerNameText = "Player: " + playerName;
-        game.renderTextCentered(playerNameText, 0.3, false);
+        SDL_Point p = game.renderTextCentered(playerName, 0.8, false);
+        if (blinkTimer < 0.5f)
+        {
+            game.renderTextPos("_", p.x, p.y);
+        }
+    }
+    else
+    {
+        if (blinkTimer < 0.5f)
+        {
+            game.renderTextCentered("_", 0.8, false);
+        }
     }
 }
 void SceneEnd::renderPhase2()
 {
+    game.renderTextCentered("Leaderboard", 0.1, true);
+    int i = 1;
+    auto posY = 0.2 * game.getWindowHeight();
+    for (auto item : game.getLeaderBoard())
+    {
+        std::string name = std::to_string(i) + ". " + item.second;
+        std::string score = std::to_string(item.first);
+        game.renderTextPos(name, 100, posY);
+        game.renderTextPos(score, 100, posY, false);
+        posY += 50;
+    }
+
+    game.renderTextCentered("Press J back to new game", 0.9, false);
 }
 
 void SceneEnd::removeLastUTF8Char(std::string &str)

@@ -7,6 +7,7 @@
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
 #include <string>
+#include <map>
 
 class Game
 {
@@ -25,7 +26,8 @@ public:
 
     void handleEvent(SDL_Event *event);
     void update(float deltaTime);
-    void renderTextCentered(std::string text, float posY, bool isTitle);
+    SDL_Point renderTextCentered(std::string text, float posY, bool isTitle);
+    void renderTextPos(std::string text, int posX, int posY, bool isLeft = true);
 
     void render();
     // setters
@@ -36,6 +38,7 @@ public:
     int getWindowWidth() const { return windowWidth; }
     int getWindowHeight() const { return windowHeight; }
     int getFinalScore() const { return finalScore; }
+    std::multimap<int, std::string, std::greater<int>> &getLeaderBoard() { return leaderBoard; }
 
 private:
     Game();
@@ -60,8 +63,11 @@ private:
     Background nearStars;
     Background farStars;
 
+    // score -> name, sorted by score in descending order
+    std::multimap<int, std::string, std::greater<int>> leaderBoard;
     void backgroundUpdate(float deltaTime);
     void renderBackground();
+    void insertLeaderBoard(int score, std::string name);
 };
 
 #endif // GAME_H

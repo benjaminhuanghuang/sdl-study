@@ -15,6 +15,8 @@ public:
 private:
     std::string playerName = "";
     bool isTyping = true;
+    float blinkTimer = 1.0f;
+
     void renderPhase1();
     void renderPhase2();
     void removeLastUTF8Char(std::string &str);
